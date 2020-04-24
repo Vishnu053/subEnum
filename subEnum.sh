@@ -39,7 +39,7 @@ assetfinderfunc() {
 dirsearchfunc() {
 	echo "==================================================="
 	echo "[+] Running dirsearch with directory-list-2.3-small wordlist..."
-	xterm -e ./dependencies/dirsearch/dirsearch.py -u $url -e php,js -w /usr/share/dirbuster/wordlists/directory-list-2.3-small.txt -t 100 | tee output/$url/recon/dirsearch.txt
+	xterm -e ./dependencies/dirsearch/dirsearch.py -u $url -e php,js -w /usr/share/dirbuster/wordlists/directory-list-2.3-small.txt -t 100 --json-report=output/$url/recon/dirsearch.json
 }
 
 amassfunc() {
@@ -149,10 +149,10 @@ while getopts :hu:Asdatnw option; do
 		;;
 	A)
 		assetfinderfunc
-		dirsearchfunc
 		amassfunc
 		hostinfofunc
-		nmapfunc
+		nmapfunc &
+		dirsearchfunc &
 		waybackfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"

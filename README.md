@@ -15,8 +15,17 @@ This script makes use of various popular tools listed below. Please make sure to
 You can run chmod +x install.sh && ./install.sh to create an alias in your bashrc file. This is not essential to run subEnum.
 
 ### SYNTAX
-subEnum.sh URL
-subEnum.sh -h displays help.
+./subEnum.sh options
+
+	options:
+	-h     Print this Help.
+	-u     The target to enumerate.
+	-A     Run everything.
+	-s     Get subdirectories.
+	-d     Run dirsearch.
+	-a     Run amass.
+	-n     Run nmap.
+	-w     Run wayback.
 
 ### ANALYSIS
 All the reports will be generated automatically inside the output folder by category.
