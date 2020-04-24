@@ -30,8 +30,6 @@ You can run chmod +x install.sh && ./install.sh to create an alias in your bashr
 ### ANALYSIS
 All the reports will be generated automatically inside the output folder by category.
 
-### NOTE
-Wayback process takes a lot of time and disk-space. Although I have included as the last process of subEnum, you may ctrl+c to stop it. If in future you want to run wayback alone, you may do so by running the **wb.sh** file.
 
 ### CONTRIBUTION
 All kinds of contributions are welcome. You are welcome to add any useful enumeration tools that you use regularly. 
