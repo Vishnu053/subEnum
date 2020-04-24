@@ -10,6 +10,16 @@ This script makes use of various popular tools listed below. Please make sure to
 5. nmap (not included)
 6. waybackurls (included)
 
+### INSTALLATION
+You can run chmod +x install.sh && ./install.sh to create an alias in your bashrc file.
+
 ### SYNTAX
 subEnum.sh URL
 subEnum.sh -h displays help.
+
+### ANALYSIS
+All the reports will be generated automatically inside the output folder by category.
+
+### CONTRIBUTION
+All kinds of contributions are welcome. You are welcome to add any useful enumeration tools that you use regularly. 
+Please make sure to include that tool inside the *dependencies* folder and call the tool from there.
