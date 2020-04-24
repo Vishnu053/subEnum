@@ -11,6 +11,7 @@ This script makes use of various popular tools listed below. Please make sure to
 6. waybackurls (included)
 
 ### INSTALLATION
+#### The install.sh is not yet ready! Use this file at your own risk! 
 You can run chmod +x install.sh && ./install.sh to create an alias in your bashrc file. This is not essential to run subEnum.
 
 ### SYNTAX
