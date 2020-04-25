@@ -68,8 +68,8 @@ whatwebfunc() {
 		mkdir output/$url/recon/host-details
 	fi
 	echo "==================================================="
-	echo "[+] Generating host information..."
-	for line in $(cat output/$url/recon/final.txt); do whatweb $line >>output/$url/recon/host-details/whatweb.txt; done
+	echo "[+] Running whatweb on targets..."
+	for line in $(cat output/$url/recon/final.txt); do whatweb -t $line >>output/$url/recon/host-details/whatweb.txt; done
 }
 
 nmapfunc() {
@@ -139,7 +139,7 @@ waybackfunc() {
 #make necesary directories if not there
 
 # Get the options
-while getopts :hu:Asdatnw option; do
+while getopts :hu:Asdabtnw option; do
 	case $option in
 	# h)	Help
 	h) # display Help
