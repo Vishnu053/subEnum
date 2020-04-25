@@ -13,6 +13,8 @@ Help() {
 	echo "-s     Get subdirectories."
 	echo "-d     Run dirsearch."
 	echo "-a     Run amass."
+	echo "-t     Run host identification."
+	echo "-b     Run whatweb."
 	echo "-n     Run nmap."
 	echo "-w     Run wayback."
 	echo
@@ -22,7 +24,7 @@ Help() {
 #Declare Functions
 assetfinderfunc() {
 	echo "==================================================="
-	echo "[+] Getting subdomains with assetfinder... $url"
+	echo "[+] Getting subdomains with assetfinder..."
 	./dependencies/assetfinder $url | tee output/$url/recon/assets.txt
 	cat output/$url/recon/assets.txt | grep $url | tee output/$url/recon/subs.txt
 	rm output/$url/recon/assets.txt
@@ -32,7 +34,10 @@ assetfinderfunc() {
 	echo "[+] Beautifying results"
 	sed 's~http[s]*://~~g' output/$url/recon/probed.txt | tee output/$url/recon/finaltemp.txt
 	echo "Removing duplicates..."
+	echo "==================================================="
 	sort -u output/$url/recon/finaltemp.txt | tee output/$url/recon/final.txt
+	echo "`wc -l < output/$url/recon/final.txt` subdomains captured."
+	echo "==================================================="
 	echo
 }
 
@@ -56,6 +61,15 @@ hostinfofunc() {
 	echo "==================================================="
 	echo "[+] Generating host information..."
 	for line in $(cat output/$url/recon/final.txt); do host $line >>output/$url/recon/host-details/host-details.txt; done
+}
+
+whatwebfunc() {
+	if [ ! -d "output/$url/recon/host-details" ]; then
+		mkdir output/$url/recon/host-details
+	fi
+	echo "==================================================="
+	echo "[+] Generating host information..."
+	for line in $(cat output/$url/recon/final.txt); do whatweb $line >>output/$url/recon/host-details/whatweb.txt; done
 }
 
 nmapfunc() {
@@ -150,7 +164,8 @@ while getopts :hu:Asdatnw option; do
 	A)
 		assetfinderfunc
 		amassfunc
-		hostinfofunc
+		hostinfofunc &
+		whatwebfunc &
 		nmapfunc &
 		dirsearchfunc &
 		waybackfunc
@@ -165,10 +180,6 @@ while getopts :hu:Asdatnw option; do
 		# exit
 		;;
 	d)
-		if [ ! -f "output/$url/recon/final.txt" ]; then
-			echo "Could not find final.txt! Running with -s now."
-			assetfinderfunc
-		fi
 		dirsearchfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
@@ -186,6 +197,16 @@ while getopts :hu:Asdatnw option; do
 			assetfinderfunc
 		fi
 		hostinfofunc
+		echo "All done! Results are saved to output/"$url
+		echo "============================================"
+		# exit
+		;;
+	b)
+		if [ ! -f "output/$url/recon/final.txt" ]; then
+			echo "Could not find final.txt! Running with -s now."
+			assetfinderfunc
+		fi
+		whatwebfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
 		# exit
