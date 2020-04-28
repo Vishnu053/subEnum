@@ -17,6 +17,8 @@ Help() {
 	echo "-b     Run whatweb."
 	echo "-n     Run nmap."
 	echo "-w     Run wayback."
+	echo "-c     Clears the clutter. Removes segregated lists and creates a single list."
+	echo "-e     Take screenshots using gowitness."
 	echo
 }
 
@@ -81,6 +83,14 @@ nmapfunc() {
 	nmap -iL output/$url/recon/final.txt -T4 -oA output/$url/recon/nmap/open_ports.txt
 }
 
+gowitnessfunc(){
+	if [ ! -d "output/$url/recon/screenshots" ]; then
+		mkdir output/$url/recon/screenshots
+	fi
+	echo "==================================================="
+	./dependencies/gowitness file --source=./output/$url/recon/probed.txt --threads=6 --resolution="1200,750" --log-format=json --timeout=60 --destination="./output/$url/recon/screenshots/"
+}
+
 waybackfunc() {
 	if [ ! -d "output/$url/recon/wayback-data" ]; then
 		mkdir output/$url/recon/wayback-data
@@ -139,7 +149,7 @@ waybackfunc() {
 #make necesary directories if not there
 
 # Get the options
-while getopts :hu:Asdabtnw option; do
+while getopts :hu:Asdabtnwe option; do
 	case $option in
 	# h)	Help
 	h) # display Help
@@ -165,9 +175,10 @@ while getopts :hu:Asdabtnw option; do
 		assetfinderfunc
 		amassfunc
 		hostinfofunc &
-		whatwebfunc &
-		nmapfunc &
+		whatwebfunc
+		nmapfunc
 		dirsearchfunc &
+		gowitnessfunc
 		waybackfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
@@ -213,6 +224,16 @@ while getopts :hu:Asdabtnw option; do
 		;;
 	n)
 		nmapfunc
+		echo "All done! Results are saved to output/"$url
+		echo "============================================"
+		# exit
+		;;
+	e)
+		if [ ! -f "output/$url/recon/final.txt" ]; then
+			echo "Could not find final.txt! Running with -s now."
+			assetfinderfunc
+		fi
+		gowitnessfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
 		# exit
