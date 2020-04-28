@@ -17,8 +17,9 @@ Help() {
 	echo "-b     Run whatweb."
 	echo "-n     Run nmap."
 	echo "-w     Run wayback."
-	echo "-c     Clears the clutter. Removes segregated lists and creates a single list."
+	# echo "-c     Clears the clutter. Removes segregated lists and creates a single list."
 	echo "-e     Take screenshots using gowitness."
+	echo "-p     Run Paramspider."
 	echo
 }
 
@@ -91,6 +92,14 @@ gowitnessfunc(){
 	./dependencies/gowitness file --source=./output/$url/recon/probed.txt --threads=6 --resolution="1200,750" --log-format=json --timeout=60 --destination="./output/$url/recon/screenshots/"
 }
 
+paramspiderfun(){
+	if [ ! -d "output/$url/recon/" ]; then
+		mkdir output/$url/recon
+	fi
+	echo "==================================================="
+	python3 ./dependencies/ParamSpider/paramspider.py --domain $url --exclude php,jpg --output ./output/$url/recon/paramspider.txt
+}
+
 waybackfunc() {
 	if [ ! -d "output/$url/recon/wayback-data" ]; then
 		mkdir output/$url/recon/wayback-data
@@ -149,7 +158,7 @@ waybackfunc() {
 #make necesary directories if not there
 
 # Get the options
-while getopts :hu:Asdabtnwe option; do
+while getopts :hu:Asdabtnwep option; do
 	case $option in
 	# h)	Help
 	h) # display Help
@@ -244,6 +253,12 @@ while getopts :hu:Asdabtnwe option; do
 			assetfinderfunc
 		fi
 		waybackfunc
+		echo "All done! Results are saved to output/"$url
+		echo "============================================"
+		# exit
+		;;
+	p)
+		paramspiderfun
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
 		# exit

@@ -10,6 +10,8 @@ This script makes use of various popular tools listed below. Please make sure to
 5. nmap (not included)
 6. waybackurls (included)
 7. whatweb (not included)
+8. paramSpider (included)
+9. gowitness (included)
 
 ### INSTALLATION
 #### The install.sh is not yet ready! Use this file at your own risk! 
@@ -25,10 +27,12 @@ You can run chmod +x install.sh && ./install.sh to create an alias in your bashr
 	-s     Get subdirectories.
 	-d     Run dirsearch.
 	-t     Run host identification.
-        -b     Run whatweb.
+    -b     Run whatweb.
 	-a     Run amass.
 	-n     Run nmap.
 	-w     Run wayback.
+	-p 	   Run ParamSpider.
+	-e     Take screenshots using gowitness.
 
 ### ANALYSIS
 All the reports will be generated automatically inside the output folder by category.
