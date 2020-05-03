@@ -20,6 +20,7 @@ Help() {
 	# echo "-c     Clears the clutter. Removes segregated lists and creates a single list."
 	echo "-e     Take screenshots using gowitness."
 	echo "-p     Run Paramspider."
+	echo "-M     Run Mayonaise Recon methodology."
 	echo
 }
 
@@ -39,7 +40,7 @@ assetfinderfunc() {
 	echo "Removing duplicates..."
 	echo "==================================================="
 	sort -u output/$url/recon/finaltemp.txt | tee output/$url/recon/final.txt
-	echo "`wc -l < output/$url/recon/final.txt` subdomains captured."
+	echo "$(wc -l <output/$url/recon/final.txt) subdomains captured."
 	echo "==================================================="
 	echo
 }
@@ -47,7 +48,7 @@ assetfinderfunc() {
 dirsearchfunc() {
 	echo "==================================================="
 	echo "[+] Running dirsearch with directory-list-2.3-small wordlist..."
-	xterm -e ./dependencies/dirsearch/dirsearch.py -u $url -e php,js -w /usr/share/dirbuster/wordlists/directory-list-2.3-small.txt -t 100 --json-report=output/$url/recon/dirsearch.json
+	xterm -e ./dependencies/dirsearch/dirsearch.py -u $url -e php,js,json,csv,pdf,zip,backup,html,cshtml,xml,sql,nosql -w /usr/share/dirbuster/wordlists/directory-list-2.3-small.txt -t 100 --json-report=output/$url/recon/dirsearch.json
 }
 
 amassfunc() {
@@ -84,7 +85,7 @@ nmapfunc() {
 	nmap -iL output/$url/recon/final.txt -T4 -oA output/$url/recon/nmap/open_ports.txt
 }
 
-gowitnessfunc(){
+gowitnessfunc() {
 	if [ ! -d "output/$url/recon/screenshots" ]; then
 		mkdir output/$url/recon/screenshots
 	fi
@@ -92,7 +93,7 @@ gowitnessfunc(){
 	./dependencies/gowitness file --source=./output/$url/recon/probed.txt --threads=6 --resolution="1200,750" --log-format=json --timeout=60 --destination="./output/$url/recon/screenshots/"
 }
 
-paramspiderfun(){
+paramspiderfun() {
 	if [ ! -d "output/$url/recon/" ]; then
 		mkdir output/$url/recon
 	fi
@@ -158,7 +159,7 @@ waybackfunc() {
 #make necesary directories if not there
 
 # Get the options
-while getopts :hu:Asdabtnwep option; do
+while getopts :hu:AsdabtnwepM option; do
 	case $option in
 	# h)	Help
 	h) # display Help
@@ -213,7 +214,7 @@ while getopts :hu:Asdabtnwep option; do
 		;;
 	t)
 		if [ ! -f "output/$url/recon/final.txt" ]; then
-			echo "Could not find final.txt! Running with -s now."
+			echo "[!] Could not find final.txt! Running with -s now."
 			assetfinderfunc
 		fi
 		hostinfofunc
@@ -223,7 +224,7 @@ while getopts :hu:Asdabtnwep option; do
 		;;
 	b)
 		if [ ! -f "output/$url/recon/final.txt" ]; then
-			echo "Could not find final.txt! Running with -s now."
+			echo "[!] Could not find final.txt! Running with -s now."
 			assetfinderfunc
 		fi
 		whatwebfunc
@@ -239,7 +240,7 @@ while getopts :hu:Asdabtnwep option; do
 		;;
 	e)
 		if [ ! -f "output/$url/recon/final.txt" ]; then
-			echo "Could not find final.txt! Running with -s now."
+			echo "[!] Could not find final.txt! Running with -s now."
 			assetfinderfunc
 		fi
 		gowitnessfunc
@@ -249,7 +250,7 @@ while getopts :hu:Asdabtnwep option; do
 		;;
 	w)
 		if [ ! -f "output/$url/recon/final.txt" ]; then
-			echo "Could not find final.txt! Running with -s now."
+			echo "[!] Could not find final.txt! Running with -s now."
 			assetfinderfunc
 		fi
 		waybackfunc
@@ -259,6 +260,63 @@ while getopts :hu:Asdabtnwep option; do
 		;;
 	p)
 		paramspiderfun
+		echo "All done! Results are saved to output/"$url
+		echo "============================================"
+		# exit
+		;;
+	M)
+		if [ ! -f "output/$url/recon/mayonaiseRecon/subDomains.txt" ]; then
+			if [ ! -f "output/$url/recon/final.txt" ]; then
+				echo "[!] Could not find final.txt! Running with -s now."
+				assetfinderfunc
+			fi
+			if [ ! -f "output/$url/recon/amass.txt" ]; then
+				echo "[!] Could not find amass.txt! Running with -s now."
+				amassfunc
+			fi
+			if [ ! -d "output/$url/recon/mayonaiseRecon" ]; then
+				mkdir output/$url/recon/mayonaiseRecon
+			fi
+			echo "============================================"
+			echo "[+] Combining, sorting and cleaning up results.."
+			cat output/$url/recon/final.txt >output/$url/recon/mayonaiseRecon/subDomains.txt
+			cat output/$url/recon/amass.txt >>output/$url/recon/mayonaiseRecon/subDomains.txt
+			sort -u output/$url/recon/mayonaiseRecon/subDomains.txt
+		fi
+		if [ ! -f "output/$url/recon/mayonaiseRecon/livetargets.txt" ]; then
+			echo "============================================"
+			echo "[+] Getting LiveTargers..."
+			sudo python3 dependencies/LiveTargetsFinder/liveTargetsFinder.py --target-list output/$url/recon/mayonaiseRecon/subDomains.txt --massdns-path dependencies/LiveTargetsFinder/massdns/bin/massdns --masscan-path dependencies/LiveTargetsFinder/masscan/bin/masscan
+			cp -r dependencies/LiveTargetsFinder/output/. output/$url/recon/mayonaiseRecon/
+			if [ ! -d "output/$url/recon/mayonaiseRecon/massDnsRaw" ]; then
+				mkdir output/$url/recon/mayonaiseRecon/massDns
+				mv output/$url/recon/mayonaiseRecon/subDomains_massdns.txt output/$url/recon/mayonaiseRecon/massDns
+			fi
+			if [ ! -d "output/$url/recon/mayonaiseRecon/massScanRaw" ]; then
+				mkdir output/$url/recon/mayonaiseRecon/massScan
+				mv output/$url/recon/mayonaiseRecon/subDomains_masscan.txt output/$url/recon/mayonaiseRecon/massScan
+			fi
+			if [ ! -d "output/$url/recon/mayonaiseRecon/liveDomains" ]; then
+				mkdir output/$url/recon/mayonaiseRecon/liveDomains
+				mv output/$url/recon/mayonaiseRecon/subDomains_domains_alive.txt output/$url/recon/mayonaiseRecon/liveDomains
+			fi
+			if [ ! -d "output/$url/recon/mayonaiseRecon/liveIPs" ]; then
+				mkdir output/$url/recon/mayonaiseRecon/liveIPs
+				mv output/$url/recon/mayonaiseRecon/subDomains_ips_alive.txt output/$url/recon/mayonaiseRecon/liveIPs
+			fi
+			if [ ! -d "output/$url/recon/mayonaiseRecon/liveURLs" ]; then
+				mkdir output/$url/recon/mayonaiseRecon/liveURLs
+				mv output/$url/recon/mayonaiseRecon/subDomains_targetUrls.txt output/$url/recon/mayonaiseRecon/liveURLs
+			fi
+		fi
+		if [ ! -d "output/$url/recon/mayonaiseRecon/wayback-data" ]; then
+			echo "============================================"
+			echo "[+] Running wayback machine..."
+			if [ ! -d "output/$url/recon/wayback-data" ]; then
+			waybackfunc
+			fi
+			cp output/$url/recon/wayback-data/ output/$url/recon/mayonaiseRecon/
+		fi
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
 		# exit
