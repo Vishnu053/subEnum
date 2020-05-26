@@ -31,6 +31,7 @@ Help() {
 #Declare Functions
 assetfinderfunc() {
 	echo "==================================================="
+	echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 	echo "[+] Getting subdomains with assetfinder..."
 	./dependencies/assetfinder $url | tee output/$url/recon/assets.txt
 	cat output/$url/recon/assets.txt | grep $url | tee output/$url/recon/subs.txt
@@ -51,6 +52,7 @@ assetfinderfunc() {
 
 dirsearchfunc() {
 	echo "==================================================="
+	echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 	echo "[+] Running dirsearch with directory-list-2.3-small wordlist..."
 	xterm -e ./dependencies/dirsearch/dirsearch.py -u $url -e php,js,json,csv,pdf,zip,backup,html,cshtml,xml,sql,nosql -w /usr/share/dirbuster/wordlists/directory-list-2.3-small.txt -t 100 --json-report=output/$url/recon/dirsearch.json
 }
@@ -204,24 +206,28 @@ while getopts :hu:AsdabtnwepM option; do
 		waybackfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit
 		;;
 	s)
 		assetfinderfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit
 		;;
 	d)
 		dirsearchfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit
 		;;
 	a)
 		amassfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit 1
 		;;
 	t)
@@ -232,6 +238,7 @@ while getopts :hu:AsdabtnwepM option; do
 		hostinfofunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit
 		;;
 	b)
@@ -242,12 +249,14 @@ while getopts :hu:AsdabtnwepM option; do
 		whatwebfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit
 		;;
 	n)
 		nmapfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit
 		;;
 	e)
@@ -258,6 +267,7 @@ while getopts :hu:AsdabtnwepM option; do
 		gowitnessfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit
 		;;
 	w)
@@ -268,12 +278,14 @@ while getopts :hu:AsdabtnwepM option; do
 		waybackfunc
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit
 		;;
 	p)
 		paramspiderfun
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit
 		;;
 	M)
@@ -290,6 +302,7 @@ while getopts :hu:AsdabtnwepM option; do
 				mkdir output/$url/recon/mayonaiseRecon
 			fi
 			echo "============================================"
+			echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 			echo "[+] Combining, sorting and cleaning up results.."
 			cat output/$url/recon/final.txt >output/$url/recon/mayonaiseRecon/subDomains.txt
 			cat output/$url/recon/amass.txt >>output/$url/recon/mayonaiseRecon/subDomains.txt
@@ -297,6 +310,7 @@ while getopts :hu:AsdabtnwepM option; do
 		fi
 		if [ ! -f "output/$url/recon/mayonaiseRecon/livetargets.txt" ]; then
 			echo "============================================"
+			echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 			echo "[+] Getting LiveTargers..."
 			sudo python3 dependencies/LiveTargetsFinder/liveTargetsFinder.py --target-list output/$url/recon/mayonaiseRecon/subDomains.txt --massdns-path dependencies/LiveTargetsFinder/massdns/bin/massdns --masscan-path dependencies/LiveTargetsFinder/masscan/bin/masscan
 			cp -r dependencies/LiveTargetsFinder/output/. output/$url/recon/mayonaiseRecon/
@@ -323,6 +337,7 @@ while getopts :hu:AsdabtnwepM option; do
 		fi
 		if [ ! -d "output/$url/recon/mayonaiseRecon/wayback-data" ]; then
 			echo "============================================"
+			echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 			echo "[+] Running wayback machine..."
 			if [ ! -d "output/$url/recon/wayback-data" ]; then
 			waybackfunc
@@ -331,6 +346,7 @@ while getopts :hu:AsdabtnwepM option; do
 		fi
 		echo "All done! Results are saved to output/"$url
 		echo "============================================"
+		echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 		# exit
 		;;
 	*) echo "Invalid arg" ;;
