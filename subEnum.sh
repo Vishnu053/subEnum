@@ -61,7 +61,7 @@ amassfunc() {
 	echo "==================================================="
 	echo "----^---------^--------ⓢⓤⓑⒺⓝⓤⓜ------"
 	echo "[+] Running amass enum..."
-	amass enum -d $url | tee output/$url/recon/amass.txt
+	./dependencies/amass enum -d $url | tee output/$url/recon/amass.txt
 	echo "Amass done!"
 }
 
