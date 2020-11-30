@@ -1,5 +1,5 @@
 # subEnum
-An automated enumeration tool that uses the most popular tools to automate the process in a single command. A seperate termux branch is also under development.
+An automated enumeration tool that uses the most popular tools to automate the process in a single command. A seperate termux branch is also available.
 
 ### REQUIREMENTS
 This script makes use of various popular tools listed below. Please make sure to install the tools **marked as not included**.
