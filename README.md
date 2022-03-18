@@ -1,6 +1,10 @@
 # subEnum
 An automated enumeration tool that uses the most popular tools to automate the process in a single command. A seperate termux branch is also available.
 
+[![Stargazers repo roster for @Vishnu053/subEnum](https://reporoster.com/stars/dark/notext/Vishnu053/subEnum)](https://github.com/Vishnu053/subEnum/stargazers)
+
+[![Forkers repo roster for @Vishnu053/subEnum](https://reporoster.com/forks/dark/notext/Vishnu053/subEnum)](https://github.com/Vishnu053/subEnum/network/members)
+
 ### REQUIREMENTS
 This script makes use of various popular tools listed below. Please make sure to install the tools **marked as not included**.
 1. assetfinder (Included)
