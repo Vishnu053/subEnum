@@ -1,7 +1,11 @@
 # subEnum
 An automated enumeration tool that uses the most popular tools to automate the process in a single command. A seperate termux branch is also available.
 
+## Stargazers
+
 [![Stargazers repo roster for @Vishnu053/subEnum](https://reporoster.com/stars/dark/notext/Vishnu053/subEnum)](https://github.com/Vishnu053/subEnum/stargazers)
+
+## Forkers 
 
 [![Forkers repo roster for @Vishnu053/subEnum](https://reporoster.com/forks/dark/notext/Vishnu053/subEnum)](https://github.com/Vishnu053/subEnum/network/members)
 
